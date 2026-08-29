@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weave agência — Planos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Raleway:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --black:#141414;
+    --cream:#f5f4f1;
+    --orange:#e94b27;
+    --peach:#fce3d8;
+    --dark:#1a1a1a;
+    --gray:#6b6b6b;
+    --gray-light:#9a9a9a;
+    --white:#ffffff;
+    --serif:'Cinzel', serif;
+    --body:'Raleway', sans-serif;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+
+  html{ scroll-behavior:smooth; }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior:auto; }
+    *{ animation:none !important; transition:none !important; }
+  }
+
+  body{
+    font-family:var(--body);
+    background:var(--cream);
+    color:var(--dark);
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  a{ color:inherit; text-decoration:none; }
+
+  ::selection{ background:var(--orange); color:var(--white); }
+
+  :focus-visible{
+    outline:2px solid var(--orange);
+    outline-offset:3px;
+  }
+
+  .wrap{
+    max-width:1180px;
+    margin:0 auto;
+    padding:0 6vw;
+  }
+
+  /* ---------- NAV ---------- */
+  .nav{
+    position:fixed;
+    top:0; left:0; right:0;
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:1.1rem 6vw;
+    background:rgba(20,20,20,0);
+    transition:background .35s ease, padding .35s ease, box-shadow .35s ease;
+  }
+  .nav.scrolled{
+    background:rgba(20,20,20,0.92);
+    backdrop-filter:blur(8px);
+    padding:0.8rem 6vw;
+    box-shadow:0 8px 24px rgba(0,0,0,0.18);
+  }
+  .nav-mark{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.05rem;
+    letter-spacing:.03em;
+    color:var(--white);
+  }
+  .nav-mark em{ color:var(--orange); font-style:italic; font-weight:500; }
+  .nav-link{
+    font-size:.82rem;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:#cfcfcf;
+    border:1px solid rgba(255,255,255,0.25);
+    padding:.5rem 1.1rem;
+    border-radius:999px;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .nav-link:hover{ color:var(--white); border-color:var(--orange); }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:var(--black);
+    color:var(--white);
+    min-height:78vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:8rem 6vw 5rem;
+  }
+  .hero-eyebrow{
+    font-size:.78rem;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--gray-light);
+    margin-bottom:1.6rem;
+  }
+  .hero h1{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:clamp(3.2rem, 9vw, 6.5rem);
+    letter-spacing:.02em;
+    line-height:1;
+  }
+  .hero .agencia{
+    display:block;
+    font-family:var(--serif);
+    font-style:italic;
+    font-weight:500;
+    color:var(--orange);
+    font-size:clamp(1.6rem, 4vw, 2.4rem);
+    margin-top:.4rem;
+  }
+  .hero p{
+    margin-top:1.8rem;
+    font-size:clamp(1rem, 1.6vw, 1.15rem);
+    color:#d8d8d8;
+    max-width:34rem;
+  }
+  .hero-scroll{
+    margin-top:3.2rem;
+    font-size:.78rem;
+    letter-spacing:.15em;
+    text-transform:uppercase;
+    color:var(--gray-light);
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:.6rem;
+    cursor:pointer;
+    transition:color .2s ease;
+  }
+  .hero-scroll:hover, .hero-scroll:focus-visible{
+    color:var(--white);
+  }
+  .hero-scroll:hover svg path, .hero-scroll:focus-visible svg path{
+    stroke:var(--orange);
+  }
+  .hero-scroll svg{ width:14px; height:20px; animation:bob 2.2s ease-in-out infinite; }
+  @keyframes bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(6px);} }
+
+  /* ---------- SUMMARY ---------- */
+  .summary{
+    padding:6.5rem 0 5rem;
+    scroll-margin-top:5rem;
+  }
+  .section-eyebrow{
+    font-size:.78rem;
+    font-weight:700;
+    letter-spacing:.24em;
+    text-transform:uppercase;
+    color:var(--orange);
+    margin-bottom:1rem;
+  }
+  .summary h2{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:clamp(1.9rem, 3.6vw, 2.7rem);
+    color:var(--dark);
+    max-width:32rem;
+    line-height:1.15;
+    margin-bottom:.9rem;
+  }
+  .summary > .wrap > p{
+    color:var(--gray);
+    max-width:36rem;
+    font-size:1.02rem;
+    margin-bottom:3rem;
+  }
+
+  .plan-list{
+    display:flex;
+    flex-direction:column;
+    border-top:1px solid #e2ded8;
+  }
+  .plan-row{
+    display:grid;
+    grid-template-columns:2.4rem 1fr auto auto;
+    align-items:center;
+    gap:1.6rem;
+    padding:1.7rem 1rem;
+    border-bottom:1px solid #e2ded8;
+    transition:background .25s ease, padding-left .25s ease;
+    cursor:pointer;
+  }
+  .plan-row:hover, .plan-row:focus-visible{
+    background:var(--white);
+    padding-left:1.5rem;
+  }
+  .plan-row-index{
+    font-family:var(--serif);
+    font-size:.85rem;
+    color:var(--gray-light);
+  }
+  .plan-row-main h3{
+    font-family:var(--serif);
+    font-weight:600;
+    font-size:1.18rem;
+    color:var(--dark);
+    margin-bottom:.35rem;
+  }
+  .plan-row-main p{
+    color:var(--gray);
+    font-size:.92rem;
+    max-width:34rem;
+  }
+  .plan-row-price{
+    font-size:.85rem;
+    color:var(--gray);
+    white-space:nowrap;
+    text-align:right;
+  }
+  .plan-row-price strong{
+    display:block;
+    font-family:var(--serif);
+    font-size:1rem;
+    color:var(--dark);
+  }
+  .plan-row-arrow{
+    width:34px; height:34px;
+    border-radius:50%;
+    border:1px solid #d8d3cb;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+    transition:transform .25s ease, background .25s ease, border-color .25s ease;
+  }
+  .plan-row-arrow svg{ width:14px; height:14px; stroke:var(--dark); transition:stroke .25s ease; }
+  .plan-row:hover .plan-row-arrow{
+    background:var(--orange);
+    border-color:var(--orange);
+    transform:translateX(4px);
+  }
+  .plan-row:hover .plan-row-arrow svg{ stroke:var(--white); }
+
+  @media (max-width:720px){
+    .plan-row{ grid-template-columns:2rem 1fr auto; }
+    .plan-row-price{ display:none; }
+  }
+
+  /* ---------- PLAN SECTIONS ---------- */
+  .plan-section{
+    padding:6rem 0 5.5rem;
+    scroll-margin-top:5rem;
+    border-top:1px solid #e2ded8;
+  }
+  .plan-section.dark{
+    background:var(--black);
+    color:var(--white);
+  }
+  .plan-section-head{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:1.5rem;
+    margin-bottom:3rem;
+  }
+  .plan-section h2{
+    font-family:var(--serif);
+    font-weight:700;
+    font-size:clamp(1.8rem, 3.2vw, 2.5rem);
+    max-width:34rem;
+    line-height:1.15;
+  }
+  .plan-section-num{
+    font-family:var(--serif);
+    font-size:.85rem;
+    color:var(--gray-light);
+    letter-spacing:.08em;
+  }
+  .back-link{
+    font-size:.78rem;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--gray);
+    border-bottom:1px solid transparent;
+    transition:border-color .2s ease, color .2s ease;
+  }
+  .back-link:hover{ color:var(--orange); border-color:var(--orange); }
+  .plan-section.dark .back-link{ color:var(--gray-light); }
+  .plan-section.dark .plan-note{ color:var(--gray-light); }
+
+  .cards{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:1.4rem;
+  }
+  @media (max-width:900px){
+    .cards{ grid-template-columns:1fr; }
+  }
+
+  .card{
+    padding:2rem 1.7rem 2.2rem;
+    border-radius:2px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.08);
+  }
+  .card.tier-0{ background:var(--white); }
+  .card.tier-1{ background:var(--peach); }
+  .card.tier-2{ background:var(--black); color:var(--white); }
+
+  .card-name{
+    font-family:var(--body);
+    font-weight:700;
+    font-size:1.15rem;
+    margin-bottom:.35rem;
+    color:var(--dark);
+  }
+  .card.tier-2 .card-name{ color:var(--white); }
+  .card-sub{
+    font-style:italic;
+    font-size:.85rem;
+    color:var(--gray);
+    min-height:2.4em;
+    margin-bottom:.9rem;
+  }
+  .card.tier-1 .card-sub{ color:#6b4030; }
+  .card.tier-2 .card-sub{ color:var(--gray-light); }
+
+  .card-price{
+    font-family:var(--body);
+    font-weight:800;
+    font-size:2rem;
+    margin-bottom:1.1rem;
+  }
+  .card.tier-0 .card-price{ color:var(--dark); }
+  .card.tier-1 .card-price{ color:var(--orange); }
+  .card.tier-2 .card-price{ color:var(--orange); }
+  .card-price span{
+    font-weight:500;
+    font-size:1rem;
+    color:var(--gray);
+  }
+  .card.tier-2 .card-price span{ color:#c9c9c9; }
+
+  .card-items{
+    list-style:none;
+    font-size:.85rem;
+    color:var(--gray);
+  }
+  .card.tier-1 .card-items{ color:#4a4a4a; }
+  .card.tier-2 .card-items{ color:#c9c9c9; }
+  .card-items li{
+    position:relative;
+    padding-left:1.05rem;
+    margin-bottom:.55rem;
+    line-height:1.4;
+  }
+  .card-items li::before{
+    content:'';
+    position:absolute;
+    left:0; top:.5em;
+    width:5px; height:5px;
+    border-radius:50%;
+    background:currentColor;
+    opacity:.55;
+  }
+
+  .plan-note{
+    margin-top:2rem;
+    font-size:.88rem;
+    font-style:italic;
+    color:var(--gray);
+    max-width:52rem;
+  }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    background:var(--black);
+    color:var(--gray-light);
+    text-align:center;
+    padding:3.5rem 6vw;
+    font-size:.85rem;
+  }
+  footer .foot-mark{
+    font-family:var(--serif);
+    font-size:1.3rem;
+    color:var(--white);
+    margin-bottom:.6rem;
+  }
+  footer .foot-mark em{ color:var(--orange); font-style:italic; }
+
+  /* ---------- SCROLL REVEAL ---------- */
+  .reveal{
+    opacity:1;
+    transform:none;
+  }
+  html.js .reveal{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  html.js .reveal.is-visible{
+    opacity:1;
+    transform:translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <a href="#top" class="nav-mark">WEAVE <em>agência</em></a>
+  <a href="#sumario" class="nav-link">Sumário</a>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-eyebrow">Tabela de Planos</div>
+  <h1>WEAVE<span class="agencia">agência</span></h1>
+  <p>Seis formas de trabalhar vídeo, arte e presença digital — escolha a que combina com o momento da sua marca.</p>
+  <a class="hero-scroll" href="#sumario">
+    <span>Ver planos</span>
+    <svg viewBox="0 0 14 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 1V19M7 19L1 13M7 19L13 13" stroke="#9a9a9a" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </a>
+</header>
+
+<section class="summary" id="sumario">
+  <div class="wrap">
+    <div class="section-eyebrow">Sumário</div>
+    <h2 class="reveal">Seis linhas de trabalho, cada uma com três ritmos.</h2>
+    <p class="reveal">Clique em qualquer plano abaixo para ver os três tiers, itens inclusos e investimento mensal.</p>
+
+    <div class="plan-list">
+      <!-- rows injected below -->
+      
+      <a class="plan-row" href="#edicao-video-design">
+        <span class="plan-row-index">01</span>
+        <span class="plan-row-main">
+          <h3>Edição de Vídeos + Design</h3>
+          <p>Edição de vídeo e artes pontuais para o feed e stories, sem captação presencial — você envia o material.</p>
+        </span>
+        <span class="plan-row-price">a partir de<strong>R$ 450 – 1.100<span style="font-weight:400;">/mês</span></strong></span>
+        <span class="plan-row-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <a class="plan-row" href="#captacao-video-stories">
+        <span class="plan-row-index">02</span>
+        <span class="plan-row-main">
+          <h3>Captação e Edição de Vídeo + Stories</h3>
+          <p>A Weave vai até você: captação presencial, edição de vídeo e publicação de stories diários.</p>
+        </span>
+        <span class="plan-row-price">a partir de<strong>R$ 650 – 850<span style="font-weight:400;">/mês</span></strong></span>
+        <span class="plan-row-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <a class="plan-row" href="#arte-feed-story">
+        <span class="plan-row-index">03</span>
+        <span class="plan-row-main">
+          <h3>Arte em Feed e Story</h3>
+          <p>Só peças gráficas: artes para o feed e para os stories, com calendário e organização mensal.</p>
+        </span>
+        <span class="plan-row-price">a partir de<strong>R$ 350 – 750<span style="font-weight:400;">/mês</span></strong></span>
+        <span class="plan-row-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <a class="plan-row" href="#videos-completo">
+        <span class="plan-row-index">04</span>
+        <span class="plan-row-main">
+          <h3>Vídeos: Planejamento, Captação, Edição e Publicação</h3>
+          <p>O ciclo inteiro do conteúdo em vídeo, do planejamento à publicação, com captação inclusa.</p>
+        </span>
+        <span class="plan-row-price">a partir de<strong>R$ 450 – 800<span style="font-weight:400;">/mês</span></strong></span>
+        <span class="plan-row-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <a class="plan-row" href="#video-artes-feed-stories">
+        <span class="plan-row-index">05</span>
+        <span class="plan-row-main">
+          <h3>Vídeo + Artes para Feed e Stories</h3>
+          <p>Vídeo e design juntos: captação, edição, artes para o feed e para os stories em um só plano.</p>
+        </span>
+        <span class="plan-row-price">a partir de<strong>R$ 550 – 1.000<span style="font-weight:400;">/mês</span></strong></span>
+        <span class="plan-row-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+
+      <a class="plan-row" href="#gestao-completa">
+        <span class="plan-row-index">06</span>
+        <span class="plan-row-main">
+          <h3>Gestão Completa de Perfil</h3>
+          <p>O plano mais completo: vídeo, arte, captação, stories diários e organização total do perfil.</p>
+        </span>
+        <span class="plan-row-price">a partir de<strong>R$ 650 – 1.200<span style="font-weight:400;">/mês</span></strong></span>
+        <span class="plan-row-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M5 12H19M19 12L13 6M19 12L13 18" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="plan-section" id="edicao-video-design">
+  <div class="wrap">
+    <div class="plan-section-head">
+      <h2 class="reveal">Edição de Vídeos + Design</h2>
+      <a class="back-link" href="#sumario">&larr; Voltar ao sumário</a>
+    </div>
+    <div class="cards">
+        <div class="card tier-0 reveal">
+          <div class="card-name">Essencial</div>
+          <div class="card-sub">Edição + Artes Pontuais</div>
+          <div class="card-price">R$ 450<span> /mês</span></div>
+          <ul class="card-items">
+            <li>2 vídeos editados por mês</li>
+            <li>2 artes para o feed por mês</li>
+            <li>Até 5 artes para Stories por mês</li>
+            <li>Capa dos Reels inclusa</li>
+            <li>Cliente envia todo o material dos vídeos</li>
+            <li>Sem captação presencial</li>
+            <li>Entrega a cada 15 dias, alternando vídeo e arte</li>
+          </ul>
+        </div>
+
+        <div class="card tier-1 reveal">
+          <div class="card-name">Presença</div>
+          <div class="card-sub">Vídeo + Design + Stories</div>
+          <div class="card-price">R$ 750<span> /mês</span></div>
+          <ul class="card-items">
+            <li>4 vídeos editados por mês</li>
+            <li>4 artes para o feed por mês</li>
+            <li>Até 8 artes para Stories por mês</li>
+            <li>Capa dos Reels inclusa</li>
+            <li>Cliente envia todo o material dos vídeos</li>
+            <li>Sem captação presencial</li>
+          </ul>
+        </div>
+
+        <div class="card tier-2 reveal">
+          <div class="card-name">Intensivo</div>
+          <div class="card-sub">Mais frequência e presença</div>
+          <div class="card-price">R$ 1.100<span> /mês</span></div>
+          <ul class="card-items">
+            <li>8 vídeos editados por mês</li>
+            <li>4 artes para o feed por mês</li>
+            <li>Até 10 artes para Stories por mês</li>
+            <li>Capa dos Reels inclusa</li>
+            <li>Cliente envia todo o material dos vídeos</li>
+            <li>Sem captação presencial</li>
+          </ul>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="plan-section" id="captacao-video-stories">
+  <div class="wrap">
+    <div class="plan-section-head">
+      <h2 class="reveal">Captação e Edição de Vídeo + Stories</h2>
+      <a class="back-link" href="#sumario">&larr; Voltar ao sumário</a>
+    </div>
+    <div class="cards">
+        <div class="card tier-0 reveal">
+          <div class="card-name">Start</div>
+          <div class="card-sub"></div>
+          <div class="card-price">R$ 650<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento básico</li>
+            <li>2 captações mensais</li>
+            <li>1 conteúdo semanal (vídeo ou arte)</li>
+            <li>Até 3 Stories por dia</li>
+            <li>Publicação dos conteúdos</li>
+          </ul>
+        </div>
+
+        <div class="card tier-1 reveal">
+          <div class="card-name">Essencial</div>
+          <div class="card-sub"></div>
+          <div class="card-price">R$ 750<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Calendário mensal</li>
+            <li>Planejamento estratégico</li>
+            <li>4 captações mensais</li>
+            <li>1 a 2 conteúdos no feed</li>
+            <li>De 3 a 5 Stories diários</li>
+            <li>Publicação dos conteúdos</li>
+          </ul>
+        </div>
+
+        <div class="card tier-2 reveal">
+          <div class="card-name">Performance</div>
+          <div class="card-sub"></div>
+          <div class="card-price">R$ 850<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento completo</li>
+            <li>Calendário estratégico</li>
+            <li>4 a 10 captações mensais</li>
+            <li>3 conteúdos para o feed (vídeos ou artes)</li>
+            <li>De 6 a 15 Stories diários</li>
+            <li>Planejamento de Stories</li>
+            <li>Publicação e suporte estratégico</li>
+          </ul>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="plan-section" id="arte-feed-story">
+  <div class="wrap">
+    <div class="plan-section-head">
+      <h2 class="reveal">Arte em Feed e Story</h2>
+      <a class="back-link" href="#sumario">&larr; Voltar ao sumário</a>
+    </div>
+    <div class="cards">
+        <div class="card tier-0 reveal">
+          <div class="card-name">Start</div>
+          <div class="card-sub">Artes essenciais para manter o perfil ativo</div>
+          <div class="card-price">R$ 350<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento básico</li>
+            <li>Calendário mensal de publicações</li>
+            <li>4 artes para o Feed por mês</li>
+            <li>Até 8 artes para Stories por mês</li>
+            <li>Capas dos conteúdos inclusas</li>
+            <li>Organização dos conteúdos mensais</li>
+          </ul>
+        </div>
+
+        <div class="card tier-1 reveal">
+          <div class="card-name">Essencial</div>
+          <div class="card-sub">Mais frequência e variedade de conteúdo</div>
+          <div class="card-price">R$ 550<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento estratégico</li>
+            <li>Calendário mensal</li>
+            <li>8 artes para o Feed por mês</li>
+            <li>Até 12 artes para Stories por mês</li>
+            <li>Capas dos conteúdos inclusas</li>
+            <li>Organização estratégica das publicações</li>
+          </ul>
+        </div>
+
+        <div class="card tier-2 reveal">
+          <div class="card-name">Performance</div>
+          <div class="card-sub">Maior volume e presença visual</div>
+          <div class="card-price">R$ 750<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento completo</li>
+            <li>Calendário estratégico mensal</li>
+            <li>12 artes para o Feed por mês</li>
+            <li>Até 20 artes para Stories por mês</li>
+            <li>Capas dos conteúdos inclusas</li>
+            <li>Planejamento de Stories</li>
+            <li>Organização estratégica dos conteúdos</li>
+          </ul>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="plan-section" id="videos-completo">
+  <div class="wrap">
+    <div class="plan-section-head">
+      <h2 class="reveal">Vídeos: Planejamento, Captação, Edição e Publicação</h2>
+      <a class="back-link" href="#sumario">&larr; Voltar ao sumário</a>
+    </div>
+    <div class="cards">
+        <div class="card tier-0 reveal">
+          <div class="card-name">Start</div>
+          <div class="card-sub">Para quem deseja começar a produzir conteúdo em vídeo.</div>
+          <div class="card-price">R$ 450<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento básico mensal</li>
+            <li>Captação de conteúdo</li>
+            <li>4 vídeos editados por mês</li>
+            <li>Fotos da captação para o cliente utilizar</li>
+            <li>Edição dos vídeos</li>
+            <li>Capas dos vídeos inclusas</li>
+            <li>Postagem dos conteúdos</li>
+          </ul>
+        </div>
+
+        <div class="card tier-1 reveal">
+          <div class="card-name">Essencial</div>
+          <div class="card-sub">Para manter uma frequência maior de vídeos nas redes sociais.</div>
+          <div class="card-price">R$ 600<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento mensal</li>
+            <li>Captação de conteúdo</li>
+            <li>6 vídeos editados por mês</li>
+            <li>Fotos da captação para o cliente utilizar</li>
+            <li>Edição dos vídeos</li>
+            <li>Capas dos vídeos inclusas</li>
+            <li>Postagem dos conteúdos</li>
+          </ul>
+        </div>
+
+        <div class="card tier-2 reveal">
+          <div class="card-name">Performance</div>
+          <div class="card-sub">Para empresas que desejam maior presença através de conteúdos em vídeo.</div>
+          <div class="card-price">R$ 800<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento estratégico mensal</li>
+            <li>Captação de conteúdo</li>
+            <li>8 vídeos editados por mês</li>
+            <li>Fotos da captação para o cliente utilizar</li>
+            <li>Edição dos vídeos</li>
+            <li>Capas dos vídeos inclusas</li>
+            <li>Postagem dos conteúdos</li>
+            <li>Organização do calendário de postagens</li>
+          </ul>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="plan-section" id="video-artes-feed-stories">
+  <div class="wrap">
+    <div class="plan-section-head">
+      <h2 class="reveal">Vídeo + Artes para Feed e Stories</h2>
+      <a class="back-link" href="#sumario">&larr; Voltar ao sumário</a>
+    </div>
+    <div class="cards">
+        <div class="card tier-0 reveal">
+          <div class="card-name">Start</div>
+          <div class="card-sub">Para manter o perfil ativo com conteúdos variados.</div>
+          <div class="card-price">R$ 550<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento mensal básico</li>
+            <li>Captação de conteúdo</li>
+            <li>2 vídeos editados por mês</li>
+            <li>2 artes para o Feed por mês</li>
+            <li>Até 5 artes para Stories por mês</li>
+            <li>Fotos da captação para o cliente utilizar</li>
+            <li>Edição dos vídeos</li>
+            <li>Capas dos vídeos inclusas</li>
+            <li>Postagem dos conteúdos</li>
+          </ul>
+        </div>
+
+        <div class="card tier-1 reveal">
+          <div class="card-name">Essencial</div>
+          <div class="card-sub">Para manter uma frequência maior e constante nas redes sociais.</div>
+          <div class="card-price">R$ 750<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento estratégico mensal</li>
+            <li>Calendário de conteúdos</li>
+            <li>Captação de conteúdo</li>
+            <li>4 vídeos editados por mês</li>
+            <li>4 artes para o Feed por mês</li>
+            <li>Até 8 artes para Stories por mês</li>
+            <li>Fotos da captação para o cliente utilizar</li>
+            <li>Edição dos vídeos</li>
+            <li>Capas dos vídeos inclusas</li>
+            <li>Postagem dos conteúdos</li>
+          </ul>
+        </div>
+
+        <div class="card tier-2 reveal">
+          <div class="card-name">Performance</div>
+          <div class="card-sub">Para empresas que desejam uma presença digital mais intensa.</div>
+          <div class="card-price">R$ 1.000<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento estratégico completo</li>
+            <li>Calendário mensal de conteúdos</li>
+            <li>Captação de conteúdo</li>
+            <li>6 vídeos editados por mês</li>
+            <li>6 artes para o Feed por mês</li>
+            <li>Até 10 artes para Stories por mês</li>
+            <li>Fotos da captação para o cliente utilizar</li>
+            <li>Edição dos vídeos</li>
+            <li>Capas dos vídeos inclusas</li>
+            <li>Postagem dos conteúdos</li>
+            <li>Organização estratégica dos conteúdos</li>
+          </ul>
+        </div>
+    </div>
+  </div>
+</section>
+
+<section class="plan-section dark" id="gestao-completa">
+  <div class="wrap">
+    <div class="plan-section-head">
+      <h2 class="reveal">Gestão Completa de Perfil</h2>
+      <a class="back-link" href="#sumario">&larr; Voltar ao sumário</a>
+    </div>
+    <div class="cards">
+        <div class="card tier-0 reveal">
+          <div class="card-name">Start</div>
+          <div class="card-sub">Gestão de Perfil</div>
+          <div class="card-price">R$ 650<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento mensal de conteúdo</li>
+            <li>Calendário de postagens</li>
+            <li>Captação de conteúdo</li>
+            <li>2 vídeos editados por mês</li>
+            <li>2 artes para o Feed por mês</li>
+            <li>Até 5 artes para Stories por mês</li>
+            <li>Fotos da captação para o cliente utilizar</li>
+            <li>Capas dos vídeos inclusas</li>
+            <li>Postagem no Feed</li>
+            <li>Até 3 Stories publicados por dia</li>
+            <li>Organização básica do perfil</li>
+          </ul>
+        </div>
+
+        <div class="card tier-1 reveal">
+          <div class="card-name">Essencial</div>
+          <div class="card-sub">Gestão de Perfil</div>
+          <div class="card-price">R$ 900<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento estratégico mensal</li>
+            <li>Calendário de conteúdos</li>
+            <li>Captação de conteúdo</li>
+            <li>4 vídeos editados por mês</li>
+            <li>4 artes para o Feed por mês</li>
+            <li>Até 8 artes para Stories por mês</li>
+            <li>Fotos da captação para o cliente utilizar</li>
+            <li>Capas dos vídeos inclusas</li>
+            <li>Postagem no Feed</li>
+            <li>Até 5 Stories publicados por dia</li>
+            <li>Organização e acompanhamento do perfil</li>
+          </ul>
+        </div>
+
+        <div class="card tier-2 reveal">
+          <div class="card-name">Performance</div>
+          <div class="card-sub">Gestão Completa</div>
+          <div class="card-price">R$ 1.200<span> /mês</span></div>
+          <ul class="card-items">
+            <li>Planejamento estratégico completo</li>
+            <li>Calendário mensal de conteúdos</li>
+            <li>Captação de conteúdo</li>
+            <li>6 vídeos editados por mês</li>
+            <li>6 artes para o Feed por mês</li>
+            <li>Até 10 artes para Stories por mês</li>
+            <li>Fotos da captação para o cliente utilizar</li>
+            <li>Capas dos vídeos inclusas</li>
+            <li>Postagem no Feed</li>
+            <li>Até 8 Stories publicados por dia</li>
+            <li>Organização completa do perfil</li>
+            <li>Acompanhamento estratégico dos conteúdos</li>
+          </ul>
+        </div>
+    </div>
+      <p class="plan-note reveal">Importante: as artes para Stories são as que a Weave precisa criar. Já o limite de Stories publicados por dia inclui também fotos, vídeos e outros materiais enviados pelo cliente ou produzidos durante as captações.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="foot-mark">weave <em>agência</em></div>
+  <div>Crateús · Ceará</div>
+</footer>
+
+<script>
+  document.documentElement.classList.add('js');
+
+  // nav background on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive:true });
+
+  // scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window){
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(el => io.observe(el));
+  } else {
+    revealEls.forEach(el => el.classList.add('is-visible'));
+  }
+</script>
+
+</body>
+</html>
